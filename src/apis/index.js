@@ -64,3 +64,14 @@ export const editComment = async (commentId, data) => {
     throw new Error('not found page');
   }
 };
+
+export const createComment = async (data) => {
+  try {
+    await apiRoot(`/comments`, {
+      method: 'POST',
+      data: data,
+    });
+  } catch (err) {
+    throw new Error('not found page');
+  }
+};

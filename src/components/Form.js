@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { editComment, getCommentListPerPage } from '../apis';
-import { getComments } from '../reducers/comments';
+import { createComment, editComment, getCommentListPerPage } from '../apis';
+import { getComments, getOneComment } from '../reducers/comments';
 
 export default function Form() {
   const dispatch = useDispatch();
@@ -19,17 +19,27 @@ export default function Form() {
     dateRef.current.value = '';
   };
 
+  const apiAndDispatch = async (page) => {
+    const data = await getCommentListPerPage(page);
+    dispatch(getComments(data, page));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const editData = {
+    const sendData = {
       profile_url: profileRef.current.value,
       author: authorRef.current.value,
       content: contentRef.current.value,
       createdAt: dateRef.current.value,
     };
-    await editComment(comment.id, editData);
-    const data = await getCommentListPerPage(page);
-    dispatch(getComments(data, page));
+    if (comment.id) {
+      await editComment(comment.id, sendData);
+      apiAndDispatch(page);
+      dispatch(getOneComment({}));
+    } else {
+      await createComment(sendData);
+      apiAndDispatch(1);
+    }
     resetInput();
   };
 
