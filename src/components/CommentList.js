@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllComments } from '../reducers/comments';
+import { getComments } from '../reducers/comments';
 import { getCommentListPerPage } from '../apis';
 
 export default function CommentList() {
   const dispatch = useDispatch();
   const { comments } = useSelector((state) => state.commentsReducer);
 
-  const handleGetAllComments = async () => {
+  const handleGetComments = async () => {
     const data = await getCommentListPerPage();
-    dispatch(getAllComments(data));
+    dispatch(getComments(data));
   };
 
   useEffect(() => {
-    handleGetAllComments();
+    handleGetComments();
   }, []);
 
   return comments.map((comment, key) => (
