@@ -1,30 +1,80 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { editComment, getCommentListPerPage } from '../apis';
+import { getComments } from '../reducers/comments';
 
-function Form() {
+export default function Form() {
+  const dispatch = useDispatch();
+  const { comment, page } = useSelector((state) => state.commentsReducer);
+  const profileRef = useRef(null);
+  const authorRef = useRef(null);
+  const contentRef = useRef(null);
+  const dateRef = useRef(null);
+
+  const resetInput = () => {
+    profileRef.current.value = '';
+    authorRef.current.value = '';
+    contentRef.current.value = '';
+    dateRef.current.value = '';
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const editData = {
+      profile_url: profileRef.current.value,
+      author: authorRef.current.value,
+      content: contentRef.current.value,
+      createdAt: dateRef.current.value,
+    };
+    await editComment(comment.id, editData);
+    const data = await getCommentListPerPage(page);
+    dispatch(getComments(data, page));
+    resetInput();
+  };
+
+  useEffect(() => {
+    if (comment.id) {
+      profileRef.current.value = comment.profile_url;
+      authorRef.current.value = comment.author;
+      contentRef.current.value = comment.content;
+      dateRef.current.value = comment.createdAt;
+    }
+  }, [comment]);
+
   return (
     <FormStyle>
-      <form>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="profile_url"
           placeholder="https://picsum.photos/id/1/50/50"
           required
+          ref={profileRef}
         />
         <br />
-        <input type="text" name="author" placeholder="작성자" />
+        <input type="text" name="author" placeholder="작성자" ref={authorRef} />
         <br />
-        <textarea name="content" placeholder="내용" required></textarea>
+        <textarea
+          name="content"
+          placeholder="내용"
+          required
+          ref={contentRef}
+        ></textarea>
         <br />
-        <input type="text" name="createdAt" placeholder="2020-05-30" required />
+        <input
+          type="text"
+          name="createdAt"
+          placeholder="2020-05-30"
+          required
+          ref={dateRef}
+        />
         <br />
         <button type="submit">등록</button>
       </form>
     </FormStyle>
   );
 }
-
-export default Form;
 
 const FormStyle = styled.div`
   & > form {

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { getCommentListLength, getCommentListPerPage } from '../apis';
 import { getComments } from '../reducers/comments';
 
 export default function PageList() {
-  const [clickPage, setClickPage] = useState(1);
+  const { page } = useSelector((state) => state.commentsReducer);
   const dispatch = useDispatch();
   let pageCount;
   const pageArray = [];
@@ -16,7 +16,7 @@ export default function PageList() {
       <Page
         key={i}
         onClick={() => handleGetComments(PAGE)}
-        active={clickPage === PAGE}
+        active={page === PAGE}
       >
         {PAGE}
       </Page>
@@ -24,9 +24,8 @@ export default function PageList() {
   }
 
   const handleGetComments = async (page) => {
-    setClickPage(page);
     const data = await getCommentListPerPage(page);
-    dispatch(getComments(data));
+    dispatch(getComments(data, page));
   };
 
   return <PageListStyle>{pageArray}</PageListStyle>;

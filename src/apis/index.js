@@ -34,11 +34,32 @@ export const getCommentListPerPage = async (page = 1) => {
   }
 };
 
-export const getComment = async ({ commentId }) => {
+export const getComment = async (commentId) => {
   try {
-    const { data } = await apiRoot(`/comments${commentId}`);
+    const { data } = await apiRoot(`/comments/${commentId}`);
 
     return data;
+  } catch (err) {
+    throw new Error('not found page');
+  }
+};
+
+export const removeComment = async (commentId) => {
+  try {
+    await apiRoot(`/comments/${commentId}`, {
+      method: 'DELETE',
+    });
+  } catch (err) {
+    throw new Error('not found page');
+  }
+};
+
+export const editComment = async (commentId, data) => {
+  try {
+    await apiRoot(`/comments/${commentId}`, {
+      method: 'PUT',
+      data: data,
+    });
   } catch (err) {
     throw new Error('not found page');
   }
