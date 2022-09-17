@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-function PageList() {
+export default function PageList() {
   const pageArray = [];
 
   pageArray.push(
@@ -11,8 +11,6 @@ function PageList() {
 
   return <PageListStyle>{pageArray}</PageListStyle>;
 }
-
-export default PageList;
 
 const PageListStyle = styled.div`
   margin-bottom: 20px;

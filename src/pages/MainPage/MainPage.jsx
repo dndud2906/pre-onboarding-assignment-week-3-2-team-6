@@ -1,16 +1,11 @@
-import React from 'react';
-import CommentListContainer from '../../containers/CommentListContainer';
-import PageListContainer from '../../containers/PageListContainer';
-import FormContainer from '../../containers/FormContainer';
+import { CommentList, PageList, Form } from '../../components';
 
-const MainPage = () => {
+export default function MainPage() {
   return (
     <div>
-      <CommentListContainer />
-      <PageListContainer />
-      <FormContainer />
+      <CommentList />
+      <PageList />
+      <Form />
     </div>
   );
-};
-
-export default MainPage;
+}
