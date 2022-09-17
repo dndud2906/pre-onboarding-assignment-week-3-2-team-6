@@ -1,11 +1,67 @@
-export const getComments = (state, page) => ({
+import * as commentAPI from '../../apis';
+
+const getComments = (state, page) => ({
   type: 'GET_COMMENTS',
   state,
   page,
 });
-export const getOneComment = (state) => ({ type: 'GET_ONE_COMMENT', state });
+const getOneComment = (state) => ({ type: 'GET_ONE_COMMENT', state });
+const getTotalLength = (state) => ({ type: 'GET_TOTAL_LENGTH', state });
 
-export const getTotalLength = (state) => ({ type: 'GET_TOTAL_LENGTH', state });
+export const getCommentsList = (page) => async (dispatch) => {
+  try {
+    const comments = await commentAPI.getCommentListPerPage(page);
+    dispatch(getComments(comments, page));
+  } catch (e) {
+    console.error('error', e);
+  }
+};
+
+export const getComment = (id) => async (dispatch) => {
+  try {
+    const comment = await commentAPI.getComment(id);
+    dispatch(getOneComment(comment));
+  } catch (e) {
+    console.error('error', e);
+  }
+};
+
+export const removeComment = (id) => async (dispatch) => {
+  try {
+    await commentAPI.removeComment(id);
+    dispatch(getCommentsList(1));
+  } catch (e) {
+    console.error('error', e);
+  }
+};
+
+export const createComment = (data) => async (dispatch) => {
+  try {
+    await commentAPI.createComment(data);
+    dispatch(getCommentsList(1));
+  } catch (e) {
+    console.error('error', e);
+  }
+};
+
+export const editComment = (id, data, page) => async (dispatch) => {
+  try {
+    await commentAPI.editComment(id, data);
+    dispatch(getCommentsList(page));
+    dispatch(getOneComment({}));
+  } catch (e) {
+    console.error('error', e);
+  }
+};
+
+export const getCommentListLength = () => async (dispatch) => {
+  try {
+    const commentsLength = await commentAPI.getCommentListLength();
+    dispatch(getTotalLength(commentsLength));
+  } catch (e) {
+    console.error('error', e);
+  }
+};
 
 const INITIAL_STATE = {
   comments: [],
@@ -14,7 +70,7 @@ const INITIAL_STATE = {
   total: 0,
 };
 
-const commentsReducer = (state = INITIAL_STATE, action) => {
+export default function commentsReducer(state = INITIAL_STATE, action) {
   if (action.type === 'GET_COMMENTS')
     return { ...state, comments: action.state, page: action.page };
 
@@ -24,6 +80,4 @@ const commentsReducer = (state = INITIAL_STATE, action) => {
   if (action.type === 'GET_TOTAL_LENGTH')
     return { ...state, total: action.state };
   return state;
-};
-
-export default commentsReducer;
+}

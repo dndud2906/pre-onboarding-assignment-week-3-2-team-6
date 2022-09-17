@@ -1,54 +1,44 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { createComment, editComment, getCommentListPerPage } from '../apis';
-import { getComments, getOneComment } from '../redux/modules/comments';
+import { createComment, editComment } from '../redux/modules/comments';
 
 export default function Form() {
   const dispatch = useDispatch();
   const { comment, page } = useSelector((state) => state.commentsReducer);
-  const profileRef = useRef(null);
-  const authorRef = useRef(null);
-  const contentRef = useRef(null);
-  const dateRef = useRef(null);
+  const inputRef = useRef([]);
 
-  const resetInput = () => {
-    profileRef.current.value = '';
-    authorRef.current.value = '';
-    contentRef.current.value = '';
-    dateRef.current.value = '';
-  };
-
-  const apiAndDispatch = async (page) => {
-    const data = await getCommentListPerPage(page);
-    dispatch(getComments(data, page));
+  const settingInput = (profile_url, author, content, createdAt) => {
+    inputRef.current[0].value = profile_url;
+    inputRef.current[1].value = author;
+    inputRef.current[2].value = content;
+    inputRef.current[3].value = createdAt;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const sendData = {
-      profile_url: profileRef.current.value,
-      author: authorRef.current.value,
-      content: contentRef.current.value,
-      createdAt: dateRef.current.value,
+      profile_url: inputRef.current[0].value,
+      author: inputRef.current[1].value,
+      content: inputRef.current[2].value,
+      createdAt: inputRef.current[3].value,
     };
     if (comment.id) {
-      await editComment(comment.id, sendData);
-      apiAndDispatch(page);
-      dispatch(getOneComment({}));
+      dispatch(editComment(comment.id, sendData, page));
     } else {
-      await createComment(sendData);
-      apiAndDispatch(1);
+      dispatch(createComment(sendData));
     }
-    resetInput();
+    settingInput('', '', '', '');
   };
 
   useEffect(() => {
     if (comment.id) {
-      profileRef.current.value = comment.profile_url;
-      authorRef.current.value = comment.author;
-      contentRef.current.value = comment.content;
-      dateRef.current.value = comment.createdAt;
+      settingInput(
+        comment.profile_url,
+        comment.author,
+        comment.content,
+        comment.createdAt
+      );
     }
   }, [comment]);
 
@@ -60,16 +50,21 @@ export default function Form() {
           name="profile_url"
           placeholder="https://picsum.photos/id/1/50/50"
           required
-          ref={profileRef}
+          ref={(el) => (inputRef.current[0] = el)}
         />
         <br />
-        <input type="text" name="author" placeholder="작성자" ref={authorRef} />
+        <input
+          type="text"
+          name="author"
+          placeholder="작성자"
+          ref={(el) => (inputRef.current[1] = el)}
+        />
         <br />
         <textarea
           name="content"
           placeholder="내용"
           required
-          ref={contentRef}
+          ref={(el) => (inputRef.current[2] = el)}
         ></textarea>
         <br />
         <input
@@ -77,7 +72,7 @@ export default function Form() {
           name="createdAt"
           placeholder="2020-05-30"
           required
-          ref={dateRef}
+          ref={(el) => (inputRef.current[3] = el)}
         />
         <br />
         <button type="submit">등록</button>

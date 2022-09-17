@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { getCommentListLength, getCommentListPerPage } from '../apis';
-import { getComments, getTotalLength } from '../redux/modules/comments';
+import {
+  getCommentsList,
+  getCommentListLength,
+} from '../redux/modules/comments';
 
 export default function PageList() {
   const { page, total, comments } = useSelector(
@@ -11,18 +13,8 @@ export default function PageList() {
   const dispatch = useDispatch();
   const pageArray = [];
 
-  const handleGetComments = async (page) => {
-    const data = await getCommentListPerPage(page);
-    dispatch(getComments(data, page));
-  };
-
-  const initPagination = async () => {
-    const commentsLength = await getCommentListLength();
-    dispatch(getTotalLength(commentsLength));
-  };
-
   useEffect(() => {
-    initPagination();
+    dispatch(getCommentListLength());
   }, [comments]);
 
   const pagination = Math.ceil(total / process.env.REACT_APP_NUM_PER_PAGE);
@@ -31,7 +23,7 @@ export default function PageList() {
     pageArray.push(
       <Page
         key={i}
-        onClick={() => handleGetComments(PAGE)}
+        onClick={() => dispatch(getCommentsList(PAGE))}
         active={page === PAGE}
       >
         {PAGE}

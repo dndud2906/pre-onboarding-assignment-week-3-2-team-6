@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { getComments, getOneComment } from '../redux/modules/comments';
-import { getComment, getCommentListPerPage, removeComment } from '../apis';
+import {
+  getCommentsList,
+  getComment,
+  removeComment,
+} from '../redux/modules/comments';
 
 export default function CommentList() {
   const dispatch = useDispatch();
@@ -10,23 +13,12 @@ export default function CommentList() {
 
   const removeCommentFunc = async (commentId) => {
     if (confirm('삭제 하시겠습니까?') === true) {
-      await removeComment(commentId);
-      getCommentsListFunc();
+      dispatch(removeComment(commentId));
     }
   };
 
-  const getCommentFunc = async (commentId) => {
-    const data = await getComment(commentId);
-    dispatch(getOneComment(data));
-  };
-
-  const getCommentsListFunc = async () => {
-    const data = await getCommentListPerPage(1);
-    dispatch(getComments(data, 1));
-  };
-
   useEffect(() => {
-    getCommentsListFunc();
+    dispatch(getCommentsList(1));
   }, []);
 
   return comments.map((comment, key) => (
@@ -40,7 +32,7 @@ export default function CommentList() {
       <Content>{comment.content}</Content>
 
       <Button>
-        <a onClick={() => getCommentFunc(comment.id)}>수정</a>
+        <a onClick={() => dispatch(getComment(comment.id))}>수정</a>
         <a onClick={() => removeCommentFunc(comment.id)}>삭제</a>
       </Button>
 
