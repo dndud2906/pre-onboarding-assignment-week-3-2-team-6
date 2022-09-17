@@ -13,7 +13,7 @@ export const getCommentsList = (page) => async (dispatch) => {
     const comments = await commentAPI.getCommentListPerPage(page);
     dispatch(getComments(comments, page));
   } catch (e) {
-    console.error('error', e);
+    throw new Error();
   }
 };
 
@@ -22,7 +22,7 @@ export const getComment = (id) => async (dispatch) => {
     const comment = await commentAPI.getComment(id);
     dispatch(getOneComment(comment));
   } catch (e) {
-    console.error('error', e);
+    throw new Error();
   }
 };
 
@@ -31,7 +31,7 @@ export const removeComment = (id) => async (dispatch) => {
     await commentAPI.removeComment(id);
     dispatch(getCommentsList(1));
   } catch (e) {
-    console.error('error', e);
+    throw new Error();
   }
 };
 
@@ -40,7 +40,7 @@ export const createComment = (data) => async (dispatch) => {
     await commentAPI.createComment(data);
     dispatch(getCommentsList(1));
   } catch (e) {
-    console.error('error', e);
+    throw new Error();
   }
 };
 
@@ -50,7 +50,7 @@ export const editComment = (id, data, page) => async (dispatch) => {
     dispatch(getCommentsList(page));
     dispatch(getOneComment({}));
   } catch (e) {
-    console.error('error', e);
+    throw new Error();
   }
 };
 
@@ -59,7 +59,7 @@ export const getCommentListLength = () => async (dispatch) => {
     const commentsLength = await commentAPI.getCommentListLength();
     dispatch(getTotalLength(commentsLength));
   } catch (e) {
-    console.error('error', e);
+    throw new Error();
   }
 };
 
