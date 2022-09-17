@@ -5,10 +5,13 @@ export const getComments = (state, page) => ({
 });
 export const getOneComment = (state) => ({ type: 'GET_ONE_COMMENT', state });
 
+export const getTotalLength = (state) => ({ type: 'GET_TOTAL_LENGTH', state });
+
 const initalState = {
   comments: [],
   comment: {},
   page: 0,
+  total: 0,
 };
 
 const commentsReducer = (state = initalState, action) => {
@@ -17,6 +20,9 @@ const commentsReducer = (state = initalState, action) => {
 
   if (action.type === 'GET_ONE_COMMENT')
     return { ...state, comment: action.state };
+
+  if (action.type === 'GET_TOTAL_LENGTH')
+    return { ...state, total: action.state };
   return state;
 };
 

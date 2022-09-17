@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:4000';
 
-export const apiRoot = axios.create({
+const apiRoot = axios.create({
   method: 'get',
   baseURL: API_URL,
 });

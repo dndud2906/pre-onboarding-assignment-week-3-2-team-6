@@ -1,16 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { getCommentListLength, getCommentListPerPage } from '../apis';
-import { getComments } from '../reducers/comments';
+import { getComments, getTotalLength } from '../reducers/comments';
 
 export default function PageList() {
-  const { page } = useSelector((state) => state.commentsReducer);
+  const { page, total, comments } = useSelector(
+    (state) => state.commentsReducer
+  );
   const dispatch = useDispatch();
-  let pageCount;
   const pageArray = [];
 
-  for (let i = 0; i < 6; i++) {
+  const handleGetComments = async (page) => {
+    const data = await getCommentListPerPage(page);
+    dispatch(getComments(data, page));
+  };
+
+  const initPagination = async () => {
+    const commentsLength = await getCommentListLength();
+    dispatch(getTotalLength(commentsLength));
+  };
+
+  useEffect(() => {
+    initPagination();
+  }, [comments]);
+
+  const pagination = Math.ceil(total / process.env.REACT_APP_NUM_PER_PAGE);
+  for (let i = 0; i < pagination; i++) {
     const PAGE = i + 1;
     pageArray.push(
       <Page
@@ -22,11 +38,6 @@ export default function PageList() {
       </Page>
     );
   }
-
-  const handleGetComments = async (page) => {
-    const data = await getCommentListPerPage(page);
-    dispatch(getComments(data, page));
-  };
 
   return <PageListStyle>{pageArray}</PageListStyle>;
 }
