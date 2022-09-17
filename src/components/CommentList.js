@@ -1,30 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllComments } from '../reducers/comments';
-import { getCommentList } from '../apis';
-
-// 임시 데이터 입니다. 코드 작성시 data 부분을 지워주세요
-// const data = [
-//   {
-//     id: 1,
-//     profile_url: 'https://picsum.photos/id/1/50/50',
-//     author: 'abc_1',
-//     content: 'UI 테스트는 어떻게 진행하나요',
-//     createdAt: '2020-05-01',
-//   },
-// ];
+import { getCommentListPerPage } from '../apis';
 
 export default function CommentList() {
-  const [list, setList] = useState([]);
-
   const dispatch = useDispatch();
-
   const { comments } = useSelector((state) => state.commentsReducer);
 
   const handleGetAllComments = async () => {
-    const data = await getCommentList();
-    setList([...data]);
+    const data = await getCommentListPerPage();
     dispatch(getAllComments(data));
   };
 
@@ -32,7 +17,7 @@ export default function CommentList() {
     handleGetAllComments();
   }, []);
 
-  return list.map((comment, key) => (
+  return comments.map((comment, key) => (
     <Comment key={key}>
       <img src={comment.profile_url} alt="" />
 

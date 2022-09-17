@@ -1,8 +1,8 @@
-export const getAllComments = (action) => ({
+export const getAllComments = (state) => ({
   type: 'GET_ALL_COMMENTS',
-  action,
+  state,
 });
-export const getOneComment = (action) => ({ type: 'GET_ONE_COMMENTS', action });
+export const getOneComment = (state) => ({ type: 'GET_ONE_COMMENTS', state });
 
 const initalState = {
   comments: [],
@@ -11,7 +11,8 @@ const initalState = {
 
 const commentsReducer = (state = initalState, action) => {
   if (action.type === 'GET_ALL_COMMENTS')
-    return { ...state, comments: [...state.comments, action] };
+    return { ...state, comments: state.comments.concat(action.state) };
+
   if (action.type === 'GET_ONE_COMMENT') return { ...state, comment: action };
   return state;
 };
