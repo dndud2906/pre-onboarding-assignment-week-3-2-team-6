@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { getComments, getOneComment } from '../reducers/comments';
+import { getComments, getOneComment } from '../redux/modules/comments';
 import { getComment, getCommentListPerPage, removeComment } from '../apis';
 
 export default function CommentList() {

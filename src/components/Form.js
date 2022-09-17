@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { createComment, editComment, getCommentListPerPage } from '../apis';
-import { getComments, getOneComment } from '../reducers/comments';
+import { getComments, getOneComment } from '../redux/modules/comments';
 
 export default function Form() {
   const dispatch = useDispatch();

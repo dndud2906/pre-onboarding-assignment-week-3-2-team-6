@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { getCommentListLength, getCommentListPerPage } from '../apis';
-import { getComments, getTotalLength } from '../reducers/comments';
+import { getComments, getTotalLength } from '../redux/modules/comments';
 
 export default function PageList() {
   const { page, total, comments } = useSelector(
