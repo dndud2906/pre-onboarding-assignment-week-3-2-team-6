@@ -6,6 +6,7 @@ import {
   postOne,
   putOne,
   getAll,
+  setPage,
 } from '../redux/modules/comments';
 
 export default function Form() {
@@ -31,13 +32,19 @@ export default function Form() {
       content: inputRef.current[2].value,
       createdAt: inputRef.current[3].value,
     };
-    data && dispatch(putOne({ commentId: data.id, sendData }));
-    dispatch(getAll(page));
 
-    !data && dispatch(postOne(sendData));
-    dispatch(getAll(1));
-    dispatch(getAllLength());
+    if (data) {
+      dispatch(putOne({ commentId: data.id, sendData }));
+      dispatch(getAll(page));
+      dispatch(setPage(page));
+    }
 
+    if (!data) {
+      dispatch(postOne(sendData));
+      dispatch(setPage(1));
+      dispatch(getAllLength());
+      dispatch(getAll(1));
+    }
     settingInput('', '', '', '');
   };
 

@@ -6,6 +6,7 @@ import {
   getAllLength,
   deleteOne,
   getOne,
+  setPage,
 } from '../redux/modules/comments';
 
 export default function CommentList() {
@@ -16,6 +17,7 @@ export default function CommentList() {
 
   const removeCommentFunc = async (commentId) => {
     if (confirm('삭제 하시겠습니까?') === true) {
+      dispatch(setPage(1));
       dispatch(deleteOne(commentId));
       dispatch(getAll(1));
       dispatch(getAllLength());

@@ -4,7 +4,17 @@ export const createPromiseThunk = (type, promiseCreator) => {
   return (param) => async (dispatch) => {
     dispatch({ type, param });
     try {
-      const payload = await promiseCreator(param);
+      let payload = {};
+      if (
+        type ===
+        ('comments/PUT_COMMENT' ||
+          'comments/POST_COMMENT' ||
+          'comments/DELETE_COMMENT')
+      ) {
+        await promiseCreator(param);
+      } else {
+        payload = await promiseCreator(param);
+      }
       dispatch({ type: SUCCESS, payload });
     } catch (error) {
       dispatch({ type: ERROR, error });

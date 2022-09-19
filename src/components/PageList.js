@@ -11,7 +11,7 @@ export default function PageList() {
   const pageArray = [];
 
   const handlePage = (page) => {
-    // dispatch(setPage(page));
+    dispatch(setPage(page));
     dispatch(getAll(page));
     dispatch(getAllLength());
   };

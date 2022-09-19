@@ -1,13 +1,6 @@
 {
   "comments": [
     {
-      "id": 5,
-      "profile_url": "https://picsum.photos/id/5/50/50",
-      "author": "abc_5",
-      "content": "Typescript는 어떤점에서 좋나요",
-      "createdAt": "2022-03-05"
-    },
-    {
       "id": 6,
       "profile_url": "https://picsum.photos/id/6/50/50",
       "author": "abc_6",
@@ -22,11 +15,11 @@
       "id": 8
     },
     {
-      "id": 9,
       "profile_url": "https://picsum.photos/id/9/50/50",
-      "author": "abc_9",
-      "content": "컴포넌트 테스트는 어떻게 하나요.",
-      "createdAt": "2022-03-09"
+      "author": "asd",
+      "content": "123",
+      "createdAt": "2022-03-09",
+      "id": 9
     },
     {
       "id": 10,
@@ -79,29 +72,22 @@
     },
     {
       "profile_url": "https://picsum.photos/id/18/50/50",
-      "author": "abc_18_18",
-      "content": "local storage는 언제 사용하는게 좋나요.",
+      "author": "sonwoo",
+      "content": "ㅆㅆ",
       "createdAt": "2022-03-18",
       "id": 18
     },
     {
-      "profile_url": "https://picsum.photos/id/19/50/50",
-      "author": "abc_19-8",
-      "content": "막히면 대답은 빨리 해주나요dd",
-      "createdAt": "2022-03-19",
-      "id": 19
-    },
-    {
       "profile_url": "https://picsum.photos/id/22/50/50",
-      "author": "abc_22_0090909",
-      "content": "주변에 React 개발자 있나요 잘되나요~?~?~?~??",
+      "author": "lll",
+      "content": "???",
       "createdAt": "2022-03-22",
       "id": 22
     },
     {
       "profile_url": "https://picsum.photos/id/20/50/50",
-      "author": "123",
-      "content": "123",
+      "author": "123455",
+      "content": "123566",
       "createdAt": "2022-03-21",
       "id": 26
     },
@@ -111,6 +97,13 @@
       "content": "151522",
       "createdAt": "2022-03-03",
       "id": 27
+    },
+    {
+      "profile_url": "https://picsum.photos/id/19/50/50",
+      "author": "tttt",
+      "content": "uuuu",
+      "createdAt": "2022-09-18",
+      "id": 28
     }
   ]
 }
