@@ -1,11 +1,19 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { createComment, editComment } from '../redux/modules/comments';
+import {
+  getAllLength,
+  postOne,
+  putOne,
+  getAll,
+} from '../redux/modules/comments';
 
 export default function Form() {
   const dispatch = useDispatch();
-  const { comment, page } = useSelector((state) => state.commentsReducer);
+  const { loading, error, data } = useSelector(
+    (state) => state.commentsReducer.comment
+  );
+  const page = useSelector((state) => state.commentsReducer.page);
   const inputRef = useRef([]);
 
   const settingInput = (profile_url, author, content, createdAt) => {
@@ -23,24 +31,20 @@ export default function Form() {
       content: inputRef.current[2].value,
       createdAt: inputRef.current[3].value,
     };
-    if (comment.id) {
-      dispatch(editComment(comment.id, sendData, page));
-    } else {
-      dispatch(createComment(sendData));
-    }
+    data && dispatch(putOne({ commentId: data.id, sendData }));
+    dispatch(getAll(page));
+
+    !data && dispatch(postOne(sendData));
+    dispatch(getAll(1));
+    dispatch(getAllLength());
+
     settingInput('', '', '', '');
   };
 
   useEffect(() => {
-    if (comment.id) {
-      settingInput(
-        comment.profile_url,
-        comment.author,
-        comment.content,
-        comment.createdAt
-      );
-    }
-  }, [comment]);
+    data &&
+      settingInput(data.profile_url, data.author, data.content, data.createdAt);
+  }, [data]);
 
   return (
     <FormStyle>

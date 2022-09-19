@@ -2,26 +2,32 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  getCommentsList,
-  getComment,
-  removeComment,
+  getAll,
+  getAllLength,
+  deleteOne,
+  getOne,
 } from '../redux/modules/comments';
 
 export default function CommentList() {
   const dispatch = useDispatch();
-  const { comments } = useSelector((state) => state.commentsReducer);
+  const { loading, error, data } = useSelector(
+    (state) => state.commentsReducer.comments
+  );
 
   const removeCommentFunc = async (commentId) => {
     if (confirm('삭제 하시겠습니까?') === true) {
-      dispatch(removeComment(commentId));
+      dispatch(deleteOne(commentId));
+      dispatch(getAll(1));
+      dispatch(getAllLength());
     }
   };
 
   useEffect(() => {
-    dispatch(getCommentsList(1));
+    dispatch(getAll(1));
+    dispatch(getAllLength());
   }, []);
 
-  return comments.map((comment, key) => (
+  return data?.map((comment, key) => (
     <Comment key={key}>
       <img src={comment.profile_url} alt="" />
 
@@ -32,7 +38,7 @@ export default function CommentList() {
       <Content>{comment.content}</Content>
 
       <Button>
-        <a onClick={() => dispatch(getComment(comment.id))}>수정</a>
+        <a onClick={() => dispatch(getOne(comment.id))}>수정</a>
         <a onClick={() => removeCommentFunc(comment.id)}>삭제</a>
       </Button>
 
