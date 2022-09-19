@@ -1,19 +1,27 @@
-import React from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  getCommentsList,
+  getComment,
+  removeComment,
+} from '../redux/modules/comments';
 
-// 임시 데이터 입니다. 코드 작성시 data 부분을 지워주세요
-const data = [
-  {
-    id: 1,
-    profile_url: 'https://picsum.photos/id/1/50/50',
-    author: 'abc_1',
-    content: 'UI 테스트는 어떻게 진행하나요',
-    createdAt: '2020-05-01',
-  },
-];
+export default function CommentList() {
+  const dispatch = useDispatch();
+  const { comments } = useSelector((state) => state.commentsReducer);
 
-function CommentList() {
-  return data.map((comment, key) => (
+  const removeCommentFunc = async (commentId) => {
+    if (confirm('삭제 하시겠습니까?') === true) {
+      dispatch(removeComment(commentId));
+    }
+  };
+
+  useEffect(() => {
+    dispatch(getCommentsList(1));
+  }, []);
+
+  return comments.map((comment, key) => (
     <Comment key={key}>
       <img src={comment.profile_url} alt="" />
 
@@ -24,16 +32,14 @@ function CommentList() {
       <Content>{comment.content}</Content>
 
       <Button>
-        <a>수정</a>
-        <a>삭제</a>
+        <a onClick={() => dispatch(getComment(comment.id))}>수정</a>
+        <a onClick={() => removeCommentFunc(comment.id)}>삭제</a>
       </Button>
 
       <hr />
     </Comment>
   ));
 }
-
-export default CommentList;
 
 const Comment = styled.div`
   padding: 7px 10px;

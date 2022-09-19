@@ -1,18 +1,38 @@
-import React from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import {
+  getCommentsList,
+  getCommentListLength,
+} from '../redux/modules/comments';
 
-function PageList() {
+export default function PageList() {
+  const { page, total, comments } = useSelector(
+    (state) => state.commentsReducer
+  );
+  const dispatch = useDispatch();
   const pageArray = [];
 
-  pageArray.push(
-    // 임시로 페이지 하나만 설정했습니다.
-    <Page key="1">1</Page>
-  );
+  useEffect(() => {
+    dispatch(getCommentListLength());
+  }, [comments]);
+
+  const pagination = Math.ceil(total / process.env.REACT_APP_NUM_PER_PAGE);
+  for (let i = 0; i < pagination; i++) {
+    const PAGE = i + 1;
+    pageArray.push(
+      <Page
+        key={i}
+        onClick={() => dispatch(getCommentsList(PAGE))}
+        active={page === PAGE}
+      >
+        {PAGE}
+      </Page>
+    );
+  }
 
   return <PageListStyle>{pageArray}</PageListStyle>;
 }
-
-export default PageList;
 
 const PageListStyle = styled.div`
   margin-bottom: 20px;
